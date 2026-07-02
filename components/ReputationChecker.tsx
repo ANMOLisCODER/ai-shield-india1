@@ -3,22 +3,22 @@
 import { useState } from "react";
 import ScamResultCard from "./ScamResultCard";
 
-export default function URLScanner() {
-  const [url, setUrl] = useState("");
+export default function ReputationChecker() {
+  const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [analysis, setAnalysis] = useState<any>(null);
 
-  const checkURL = async () => {
+  const checkReputation = async () => {
     try {
       setLoading(true);
 
-      const response = await fetch("/api/analyze-url", {
+      const response = await fetch("/api/analyze-reputation", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          url,
+          input,
         }),
       });
 
@@ -27,7 +27,7 @@ export default function URLScanner() {
       setAnalysis(JSON.parse(data.result));
     } catch (error) {
       console.error(error);
-      alert("URL Analysis Failed");
+      alert("Reputation Analysis Failed");
     } finally {
       setLoading(false);
     }
@@ -37,26 +37,26 @@ export default function URLScanner() {
     <div className="mx-auto max-w-4xl rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur-xl">
 
       <h2 className="mb-4 text-3xl font-bold">
-        🔗 URL Scam Detector
+        🛡 Reputation Checker
       </h2>
 
       <p className="mb-8 text-gray-400">
-        Check whether a website or link is safe before opening it.
+        Check phone numbers, emails, websites and UPI IDs before trusting them.
       </p>
 
       <input
         type="text"
-        value={url}
-        onChange={(e) => setUrl(e.target.value)}
-        placeholder="Paste URL here..."
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        placeholder="Enter phone number, email, website or UPI ID..."
         className="w-full rounded-2xl border border-white/10 bg-[#0b1225] p-5 text-lg outline-none focus:border-cyan-500"
       />
 
       <button
-        onClick={checkURL}
+        onClick={checkReputation}
         className="mt-6 rounded-full bg-cyan-500 px-8 py-4 text-lg font-bold text-black transition hover:scale-105"
       >
-        {loading ? "Analyzing..." : "Check URL"}
+        {loading ? "Analyzing..." : "Check Reputation"}
       </button>
 
       {analysis && (
